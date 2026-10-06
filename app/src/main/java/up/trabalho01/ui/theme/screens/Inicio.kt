@@ -1,6 +1,7 @@
 package up.trabalho01.ui.theme.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +12,10 @@ import androidx.compose.material.icons.filled.Pix
 import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,10 +31,15 @@ private val Background = Color(0xFFF6F7F9)
 private val TextSecondary = Color(0xFF6B7280)
 
 @Composable
-fun home() {
+fun home(
+    onAbrirCartoes: () -> Unit,
+    onAbrirCaixinhas: () -> Unit,
+    onAbrirClube: () -> Unit
+) {
 
     val limit = 100f
     val used = 80f
+    var aviso by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
@@ -106,22 +116,26 @@ fun home() {
 
             QuickAction(
                 icon = Icons.Default.Pix,
-                title = "Pix"
+                title = "Pix",
+                onClick = { aviso = "Área Pix selecionada." }
             )
 
             QuickAction(
                 icon = Icons.Default.ReceiptLong,
-                title = "Pagar"
+                title = "Pagar",
+                onClick = { aviso = "Área de pagamentos selecionada." }
             )
 
             QuickAction(
                 icon = Icons.Default.Add,
-                title = "Depositar"
+                title = "Caixinhas",
+                onClick = onAbrirCaixinhas
             )
 
             QuickAction(
                 icon = Icons.Default.CreditCard,
-                title = "Cartões"
+                title = "Cartões",
+                onClick = onAbrirCartoes
             )
         }
 
@@ -163,7 +177,7 @@ fun home() {
                 }
 
                 Button(
-                    onClick = {},
+                    onClick = onAbrirClube,
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White,
@@ -271,12 +285,22 @@ fun home() {
             }
         }
     }
+
+    aviso?.let { mensagem ->
+        AlertDialog(
+            onDismissRequest = { aviso = null },
+            title = { Text("Ação selecionada") },
+            text = { Text(mensagem) },
+            confirmButton = { TextButton(onClick = { aviso = null }) { Text("OK") } }
+        )
+    }
 }
 
 @Composable
 fun QuickAction(
     icon: ImageVector,
-    title: String
+    title: String,
+    onClick: () -> Unit
 ) {
 
     Column(
@@ -284,7 +308,7 @@ fun QuickAction(
     ) {
 
         Surface(
-            modifier = Modifier.size(58.dp),
+            modifier = Modifier.size(58.dp).clickable(onClick = onClick),
             shape = RoundedCornerShape(18.dp),
             color = Color.White,
             shadowElevation = 1.dp

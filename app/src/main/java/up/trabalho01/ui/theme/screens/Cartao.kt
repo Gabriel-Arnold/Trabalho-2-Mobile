@@ -1,386 +1,264 @@
 package up.trabalho01.ui.theme.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CreditCard
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.ReceiptLong
-import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import up.trabalho01.ui.theme.components.Cartao
+import java.text.NumberFormat
+import java.util.Locale
 
-private val BankBlue = Color(0xFF155EEF)
-private val DarkBlue = Color(0xFF0B1F44)
-private val Background = Color(0xFFF6F7F9)
-private val TextSecondary = Color(0xFF6B7280)
+private val CardBlue = Color(0xFF155EEF)
+private val CardDarkBlue = Color(0xFF0B1F44)
+private val CardBackground = Color(0xFFF6F7F9)
+private val CardSecondary = Color(0xFF6B7280)
+private val CardRed = Color(0xFFDC2626)
 
 @Composable
-fun cartao() {
+fun ListaCartoesScreen(
+    cartoes: List<Cartao>,
+    onAdicionar: (String, String, Double) -> Unit,
+    onRemover: (Long) -> Unit,
+    onAbrirDetalhes: (Long) -> Unit
+) {
+    var mostrarFormulario by remember { mutableStateOf(false) }
+    var idParaExcluir by remember { mutableStateOf<Long?>(null) }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Background)
-            .padding(horizontal = 20.dp)
+        modifier = Modifier.fillMaxSize().background(CardBackground).padding(horizontal = 20.dp)
     ) {
-
-        Spacer(modifier = Modifier.height(28.dp))
-
-        // Título
-        Text(
-            text = "Cartões",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            color = DarkBlue
-        )
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Text(
-            text = "Gerencie seus cartões e sua fatura.",
-            fontSize = 14.sp,
-            color = TextSecondary
-        )
-
-        Spacer(modifier = Modifier.height(28.dp))
-
-        // Fatura atual
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.White
-            ),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 2.dp
-            )
-        ) {
-
-            Column(
-                modifier = Modifier.padding(20.dp)
-            ) {
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    Column {
-
-                        Text(
-                            text = "Fatura atual",
-                            fontSize = 14.sp,
-                            color = TextSecondary
-                        )
-
-                        Spacer(modifier = Modifier.height(5.dp))
-
-                        Text(
-                            text = "R$ 1.284,52",
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF111827)
-                        )
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .size(44.dp)
-                            .clip(CircleShape)
-                            .background(BankBlue.copy(alpha = 0.10f)),
-                        contentAlignment = Alignment.Center
-                    ) {
-
-                        Icon(
-                            imageVector = Icons.Default.ReceiptLong,
-                            contentDescription = null,
-                            tint = BankBlue
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(22.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-
-                    Column {
-                        Text(
-                            text = "Fecha em",
-                            fontSize = 12.sp,
-                            color = TextSecondary
-                        )
-
-                        Text(
-                            text = "18 OUT",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-
-                    Column(
-                        horizontalAlignment = Alignment.End
-                    ) {
-
-                        Text(
-                            text = "Vencimento",
-                            fontSize = 12.sp,
-                            color = TextSecondary
-                        )
-
-                        Text(
-                            text = "25 OUT",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Button(
-                    onClick = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = BankBlue
-                    )
-                ) {
-
-                    Text(
-                        text = "Ver fatura",
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        // Ações
-        Text(
-            text = "Acesso rápido",
-            fontSize = 19.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color(0xFF111827)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-
-            CardAction(
-                icon = Icons.Default.ReceiptLong,
-                title = "Fatura"
-            )
-
-            CardAction(
-                icon = Icons.Default.Lock,
-                title = "Bloquear"
-            )
-
-            CardAction(
-                icon = Icons.Default.Visibility,
-                title = "Dados"
-            )
-
-            CardAction(
-                icon = Icons.Default.MoreHoriz,
-                title = "Mais"
-            )
-        }
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        // Cartões do usuário
+        Spacer(Modifier.height(24.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-
-            Text(
-                text = "Meus cartões",
-                fontSize = 19.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color(0xFF111827)
-            )
-
-            Text(
-                text = "2 cartões",
-                fontSize = 13.sp,
-                color = TextSecondary
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Cartão principal
-        BankCard(
-            cardName = "Agi&Otta Platinum",
-            number = "••••  ••••  ••••  4821",
-            holder = "GABRIEL",
-            color = DarkBlue
-        )
-
-        Spacer(modifier = Modifier.height(14.dp))
-
-        // Segundo cartão
-        BankCard(
-            cardName = "Agi&Otta Virtual",
-            number = "••••  ••••  ••••  7354",
-            holder = "GABRIEL",
-            color = BankBlue
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-    }
-}
-
-@Composable
-fun BankCard(
-    cardName: String,
-    number: String,
-    holder: String,
-    color: Color
-) {
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(175.dp),
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = color
-        )
-    ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Text(
-                    text = cardName,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White
-                )
-
-                Icon(
-                    imageVector = Icons.Default.CreditCard,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(27.dp)
-                )
+            Column {
+                Text("Meus cartões", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = CardDarkBlue)
+                Text("Gerencie seus cartões e limites.", color = CardSecondary)
             }
+            FilledIconButton(onClick = { mostrarFormulario = true }) {
+                Icon(Icons.Default.Add, "Adicionar cartão")
+            }
+        }
+        Spacer(Modifier.height(22.dp))
 
-            Text(
-                text = number,
-                fontSize = 19.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.White
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Bottom
-            ) {
-
-                Column {
-
-                    Text(
-                        text = "TITULAR",
-                        fontSize = 9.sp,
-                        color = Color.White.copy(alpha = 0.65f)
-                    )
-
-                    Text(
-                        text = holder,
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
+        if (cartoes.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(Icons.Default.CreditCard, null, modifier = Modifier.size(52.dp), tint = CardSecondary)
+                    Text("Nenhum cartão cadastrado", color = CardSecondary)
+                    TextButton(onClick = { mostrarFormulario = true }) { Text("Adicionar cartão") }
                 }
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(14.dp),
+                contentPadding = PaddingValues(bottom = 20.dp)
+            ) {
+                items(cartoes, key = { it.id }) { cartao ->
+                    Card(
+                        modifier = Modifier.fillMaxWidth().clickable { onAbrirDetalhes(cartao.id) },
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = CardDarkBlue)
+                    ) {
+                        Column(modifier = Modifier.padding(20.dp)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(cartao.nome, color = Color.White, fontWeight = FontWeight.SemiBold)
+                                IconButton(onClick = { idParaExcluir = cartao.id }) {
+                                    Icon(Icons.Default.DeleteOutline, "Remover cartão", tint = Color.White)
+                                }
+                            }
+                            Spacer(Modifier.height(18.dp))
+                            Text("••••  ••••  ••••  ${cartao.numeroFinal}", color = Color.White, fontSize = 19.sp)
+                            Spacer(Modifier.height(18.dp))
+                            Text(
+                                "Disponível: ${formatarValor(cartao.limiteDisponivel)}",
+                                color = Color.White.copy(alpha = .8f)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-                Text(
-                    text = "VISA",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = Color.White
-                )
+    if (mostrarFormulario) {
+        FormularioCartao(
+            onFechar = { mostrarFormulario = false },
+            onSalvar = { nome, final, limite ->
+                onAdicionar(nome, final, limite)
+                mostrarFormulario = false
+            }
+        )
+    }
+
+    idParaExcluir?.let { id ->
+        AlertDialog(
+            onDismissRequest = { idParaExcluir = null },
+            title = { Text("Remover cartão?") },
+            text = { Text("O cartão deixará de aparecer na sua lista.") },
+            confirmButton = {
+                TextButton(onClick = { onRemover(id); idParaExcluir = null }) {
+                    Text("Remover", color = CardRed)
+                }
+            },
+            dismissButton = { TextButton(onClick = { idParaExcluir = null }) { Text("Cancelar") } }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DetalhesCartaoScreen(cartao: Cartao?, onVoltar: () -> Unit) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(cartao?.nome ?: "Detalhes do cartão") },
+                navigationIcon = {
+                    IconButton(onClick = onVoltar) { Icon(Icons.Default.ArrowBack, "Voltar") }
+                }
+            )
+        }
+    ) { padding ->
+        if (cartao == null) {
+            Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
+                Text("Cartão não encontrado")
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().background(CardBackground).padding(padding),
+                contentPadding = PaddingValues(20.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                item {
+                    Card(
+                        modifier = Modifier.fillMaxWidth().height(190.dp),
+                        shape = RoundedCornerShape(22.dp),
+                        colors = CardDefaults.cardColors(containerColor = CardDarkBlue)
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxSize().padding(22.dp),
+                            verticalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                Text(cartao.nome, color = Color.White, fontWeight = FontWeight.Bold)
+                                Icon(Icons.Default.CreditCard, null, tint = Color.White)
+                            }
+                            Text("••••  ••••  ••••  ${cartao.numeroFinal}", color = Color.White, fontSize = 20.sp)
+                            Text("AGI&OTTA BANK", color = Color.White.copy(alpha = .75f))
+                        }
+                    }
+                }
+                item {
+                    Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp)) {
+                        Column(modifier = Modifier.padding(20.dp)) {
+                            Text("Limite disponível", color = CardSecondary)
+                            Text(
+                                formatarValor(cartao.limiteDisponivel),
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(Modifier.height(18.dp))
+                            LinearProgressIndicator(
+                                progress = { cartao.percentualUtilizado },
+                                modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
+                                color = CardBlue,
+                                trackColor = Color(0xFFE5E7EB)
+                            )
+                            Spacer(Modifier.height(8.dp))
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                Text("Usado: ${formatarValor(cartao.limiteUsado)}", fontSize = 12.sp, color = CardSecondary)
+                                Text("Total: ${formatarValor(cartao.limiteTotal)}", fontSize = 12.sp, color = CardSecondary)
+                            }
+                        }
+                    }
+                }
+                item {
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Row(modifier = Modifier.fillMaxWidth().padding(18.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Default.Calculate, null, tint = CardBlue)
+                            Spacer(Modifier.width(12.dp))
+                            Column {
+                                Text("Uso calculado", fontWeight = FontWeight.SemiBold)
+                                Text(
+                                    "${(cartao.percentualUtilizado * 100).toInt()}% do limite foi utilizado",
+                                    color = CardSecondary
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun CardAction(
-    icon: ImageVector,
-    title: String
-) {
+private fun FormularioCartao(onFechar: () -> Unit, onSalvar: (String, String, Double) -> Unit) {
+    var nome by remember { mutableStateOf("") }
+    var numeroFinal by remember { mutableStateOf("") }
+    var limiteTexto by remember { mutableStateOf("") }
+    val limite = limiteTexto.replace(',', '.').toDoubleOrNull()
+    val valido = nome.isNotBlank() && numeroFinal.length == 4 && limite != null && limite > 0
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Surface(
-            modifier = Modifier.size(58.dp),
-            shape = RoundedCornerShape(18.dp),
-            color = Color.White,
-            shadowElevation = 1.dp
-        ) {
-
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-
-                Icon(
-                    imageVector = icon,
-                    contentDescription = title,
-                    modifier = Modifier.size(24.dp),
-                    tint = DarkBlue
+    AlertDialog(
+        onDismissRequest = onFechar,
+        title = { Text("Novo cartão") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                OutlinedTextField(
+                    value = nome,
+                    onValueChange = { nome = it.take(30) },
+                    label = { Text("Nome do cartão") },
+                    singleLine = true
+                )
+                OutlinedTextField(
+                    value = numeroFinal,
+                    onValueChange = { numeroFinal = it.filter(Char::isDigit).take(4) },
+                    label = { Text("Últimos 4 números") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true
+                )
+                OutlinedTextField(
+                    value = limiteTexto,
+                    onValueChange = { limiteTexto = it },
+                    label = { Text("Limite") },
+                    prefix = { Text("R$ ") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    singleLine = true
                 )
             }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = title,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color(0xFF374151)
-        )
-    }
+        },
+        confirmButton = {
+            TextButton(onClick = { onSalvar(nome.trim(), numeroFinal, limite ?: 0.0) }, enabled = valido) {
+                Text("Adicionar")
+            }
+        },
+        dismissButton = { TextButton(onClick = onFechar) { Text("Cancelar") } }
+    )
 }
+
+private fun formatarValor(valor: Double): String =
+    NumberFormat.getCurrencyInstance(Locale("pt", "BR")).format(valor)

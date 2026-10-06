@@ -7,11 +7,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MonetizationOn
-import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.SwapHoriz
 
 @Composable
 fun NavBar(
@@ -20,9 +18,9 @@ fun NavBar(
     onPayClick: () -> Unit,
     onMoreClick: () -> Unit
 ) {
-    NavigationBar() {
+    NavigationBar {
         NavigationBarItem(
-            selected = selectedItem == "home",
+            selected = selectedItem == "inicio",
             onClick = onHomeClick,
             icon = {
                 Icon(
@@ -34,27 +32,27 @@ fun NavBar(
         )
 
         NavigationBarItem(
-            selected = selectedItem == "clube",
+            selected = selectedItem == "cartoes" || selectedItem.startsWith("detalhe_cartao"),
             onClick = onPayClick,
             icon = {
                 Icon(
-                    Icons.Default.Camera,
-                    contentDescription = "Clube"
+                    Icons.Default.CreditCard,
+                    contentDescription = "Cartões"
                 )
             },
-            label = { Text("Clube") }
+            label = { Text("Cartões") }
         )
 
         NavigationBarItem(
-            selected = selectedItem == "caixinha",
+            selected = selectedItem == "caixinhas" || selectedItem.startsWith("detalhe_caixinha"),
             onClick = onMoreClick,
             icon = {
                 Icon(
                     Icons.Default.MonetizationOn,
-                    contentDescription = "Caixinha"
+                    contentDescription = "Caixinhas"
                 )
             },
-            label = { Text("Caixinha") }
+            label = { Text("Caixinhas") }
         )
     }
 }
